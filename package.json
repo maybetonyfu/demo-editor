@@ -1,0 +1,20 @@
+{
+  "name": "native-editor",
+  "version": "1.0.0",
+  "description": "The default template for a Neutralinojs app. It's possible to use your favorite frontend framework by using [these steps](https://neutralino.js.org/docs/how-to/use-a-frontend-library).",
+  "main": "index.js",
+  "scripts": {
+    "dev": "esbuild src/main.jsx --bundle --sourcemap --outfile=build/js/main.js --watch",
+    "build": "esbuild src/main.jsx --bundle --sourcemap --outfile=build/js/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.15.9"
+  }
+}
