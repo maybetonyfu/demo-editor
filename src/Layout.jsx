@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 
-const Layout = () => {
-    const [leftWindowSize, setLeftWidth] = useState(100);
+const Layout = ({ left, middle, right }) => {
+    const [leftWindowSize, setLeftWidth] = useState(200);
     const [rightWindowSize, setRightWidth] = useState(300);
     const [resizer, setResizer] = useState(null);
     const myref = useRef(null);
@@ -13,6 +13,7 @@ const Layout = () => {
                 myref.current.style.cursor = 'auto'
             }}
             onMouseMove={(e) => {
+                e.preventDefault()
                 if (resizer === 'left') {
                     if (e.clientX !== 0) setLeftWidth(e.clientX)
                     myref.current.style.cursor = 'ew-resize';
@@ -22,17 +23,28 @@ const Layout = () => {
                     myref.current.style.cursor = 'ew-resize';
                 }
             }}>
-            <div style={{ width: leftWindowSize }} className="bg-gray-200"></div>
+            <div style={{ width: leftWindowSize }} className="bg-gray-200">
+                {left}
+            </div>
             <div
                 style={{ cursor: 'ew-resize' }}
-                onMouseDown={(e) => setResizer('left')}
+                onMouseDown={(e) => {
+                    e.preventDefault()
+                    setResizer('left')
+                }}
                 className="h-full bg-black w-2"></div>
-            <div className="flex-grow"></div>
+            <div className="flex-grow overflow-x-auto">
+                {middle}
+            </div>
             <div
                 style={{ cursor: 'ew-resize' }}
-                onMouseDown={(e) => setResizer('right')}
+                onMouseDown={(e) => {
+                    e.preventDefault()
+                    setResizer('right')}}
                 className="h-full bg-black w-2"></div>
-            <div style={{ width: rightWindowSize }} className="bg-gray-200"></div>
+            <div style={{ width: rightWindowSize }} className="bg-gray-200">
+                {right}
+            </div>
         </div>)
 }
 
