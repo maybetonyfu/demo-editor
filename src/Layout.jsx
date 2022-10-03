@@ -23,7 +23,7 @@ const Layout = ({ left, middle, right }) => {
                     myref.current.style.cursor = 'ew-resize';
                 }
             }}>
-            <div style={{ width: leftWindowSize }} className="bg-gray-200">
+            <div style={{ width: leftWindowSize }}>
                 {left}
             </div>
             <div
@@ -33,7 +33,7 @@ const Layout = ({ left, middle, right }) => {
                     setResizer('left')
                 }}
                 className="h-full bg-black w-2"></div>
-            <div className="flex-grow overflow-x-auto">
+            <div className="flex-grow overflow-x-auto overflow-y-hidden">
                 {middle}
             </div>
             <div
@@ -42,7 +42,7 @@ const Layout = ({ left, middle, right }) => {
                     e.preventDefault()
                     setResizer('right')}}
                 className="h-full bg-black w-2"></div>
-            <div style={{ width: rightWindowSize }} className="bg-gray-200">
+            <div style={{ width: rightWindowSize }}>
                 {right}
             </div>
         </div>)

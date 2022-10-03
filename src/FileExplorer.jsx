@@ -1,15 +1,18 @@
-import React, {useState} from "react"
+import React, { useState } from "react"
 import EmptyFolder from "./EmptyFolder"
 import FileEntry from "./FileEntry"
+import { fileListAtom } from "./filesystem"
+import { useAtom } from "jotai"
+
 export default () => {
-    const [files, setFiles] = useState([])
+    const [fileList] = useAtom(fileListAtom)
     return (
-    files.length === 0 ?
-    <EmptyFolder setFiles={setFiles}></EmptyFolder>
-    : <div className="flex flex-col">
-        {
-            files.map((f, i) => <FileEntry entry={f.entry} type={f.type} key={i}/>)
-        }
-    </div>
+        fileList.length === 0 ?
+            <EmptyFolder></EmptyFolder>
+            : <div className="flex flex-col">
+                {
+                    fileList.map((f, i) => <FileEntry entry={f.entry} type={f.type} key={i} />)
+                }
+            </div>
     )
 }

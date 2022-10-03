@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 specifiers:
   '@codemirror/state': ^6.1.2
@@ -22,8 +22,11 @@ devDependencies:
 
 packages:
 
-  /@codemirror/autocomplete/6.3.0:
+  /@codemirror/autocomplete/6.3.0_chrydplyatbt5ihqhizt4jpg6q:
     resolution: {integrity: sha512-4jEvh3AjJZTDKazd10J6ZsCIqaYxDMCeua5ouQxY8hlFIml+nr7le0SgBhT3SIytFBmdzPK3AUhXGuW3T79nVg==}
+    peerDependencies:
+      '@codemirror/state': ^6.0.0
+      '@codemirror/view': ^6.0.0
     dependencies:
       '@codemirror/language': 6.2.1
       '@codemirror/state': 6.1.2
@@ -116,7 +119,7 @@ packages:
   /codemirror/6.0.1:
     resolution: {integrity: sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==}
     dependencies:
-      '@codemirror/autocomplete': 6.3.0
+      '@codemirror/autocomplete': 6.3.0_chrydplyatbt5ihqhizt4jpg6q
       '@codemirror/commands': 6.1.1
       '@codemirror/language': 6.2.1
       '@codemirror/lint': 6.0.0

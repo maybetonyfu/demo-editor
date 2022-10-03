@@ -1,18 +1,38 @@
 import React, { useEffect, useRef, useState } from "react"
 import { basicSetup, EditorView } from "codemirror";
 import { EditorState, StateEffect, StateField } from "@codemirror/state";
-import { Decoration } from "@codemirror/view";
-import { currentDocument } from "./filesystem";
+import { Decoration, keymap } from "@codemirror/view";
+import { currentDocumentAtom, saveDocAtom } from "./filesystem";
 import { useAtom } from "jotai";
+
 
 export default () => {
     let dom = useRef(null)
+    let [, saveDoc] = useAtom(saveDocAtom)
+    let [document] = useAtom(currentDocumentAtom)
+
+    let defaultTheme = EditorView.theme({
+        "&": {
+            height: "100%"
+        }
+    })
+
+    const saveDocument = (view) => {
+        console.log("Save document")
+        saveDoc(view.state.doc.sliceString(0, view.state.doc.length))
+    }
+    const defaultKeymap = keymap.of([{
+        key: "Mod-s",
+        preventDefault: true,
+        run: saveDocument
+    }])
+
     let [view, setView] = useState(null);
-    let [document] = useAtom(currentDocument)
+
     useEffect(() => {
         let state = EditorState.create({
             doc: document,
-            extensions: [basicSetup]
+            extensions: [basicSetup, defaultTheme, defaultKeymap]
         });
 
         let v = new EditorView({
@@ -24,18 +44,17 @@ export default () => {
 
     useEffect(() => {
         if (view) {
-            // console.log("Doc change:", document)
-            // console.log(view.state)
             view.dispatch({
-                changes:  {from:0, to: view.state.doc.length}
+                changes: { from: 0, to: view.state.doc.length }
             })
             view.dispatch({
-                changes: {from:0, insert: document}})
+                changes: { from: 0, insert: document }
+            })
         }
     }, [document])
 
     return (
-        <div ref={dom} id="editor">
+        <div ref={dom} id="editor" className="h-full ">
         </div>
     )
 }
