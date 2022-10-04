@@ -1,4 +1,5 @@
 module Test1 where
+
 import Test2
 
 
@@ -6,4 +7,8 @@ a = x
 
 b = y
 
-c = a + b
+-- c = a + b
+
+z = 9
+
+t = id

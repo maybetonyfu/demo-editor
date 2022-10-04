@@ -2,12 +2,15 @@ import React from "react";
 import { useAtom } from "jotai";
 import { openDoc } from "./filesystem";
 import { CaretRightIcon, FileIcon, FolderIcon } from "./Icons"
+import { setDocumentImportsAtom } from "./typeings";
 
 const File = ({path}) => {
     let [, open] = useAtom(openDoc);
+    let [, setImports] = useAtom(setDocumentImportsAtom)
     return (<div
-        onClick={async () => {
+        onClick={() => {
             open(path)
+            setImports(path)
         }} 
         className="flex px-2 py-0.5 items-center cursor-pointer">
         <FileIcon className="w-4 ml-4" />

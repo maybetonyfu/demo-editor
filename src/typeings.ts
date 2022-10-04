@@ -1,13 +1,12 @@
 import { atom } from 'jotai'
-import { currentDocNameAtom, getRootAtom, currentDocPathAtom } from './filesystem'
+import {  getRootAtom } from './filesystem'
 
 export const documentImportsAtom = atom<{signature: string, moduleName: string, modulePath: string}[]>([])
 
-export const setDocumentImportsAtom = atom(null, async (get, set, _) => {
-    let isHaskell = get(currentDocNameAtom).endsWith('.hs')
+export const setDocumentImportsAtom = atom(null, async (get, set, modulePath: string) => {
+    let isHaskell = modulePath.endsWith('.hs')
     if (!isHaskell) return;
     let rootDir = get(getRootAtom);
-    let modulePath = get(currentDocPathAtom);
     let command = `cd ${rootDir} && stack ghc -- -fno-code -fforce-recomp -ddump-types -ddump-json ${modulePath}`
     // console.log(command)
     // @ts-ignore
