@@ -1,14 +1,12 @@
 module Test1 where
 
-import Test2
+import Test2 
+import Test3
 
-
-a = x
+a = Test2.x
 
 b = y
 
--- c = a + b
+u = 4
 
-z = 9
 
-t = id
