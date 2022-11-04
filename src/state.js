@@ -13,7 +13,9 @@ const useAppStore = create((set, get) => ({
   docPath: "",
   docContent: "",
   igOut: {},
-  highlights: [],
+  typeErrors: [],
+  typeErrorNumber: null,
+  typeErrorFix: null,
   igError: "",
   tree: { path: ".", type: "DIRECTORY", children: [] },
   setRootDir: (rootDir) => set({ rootDir }),
@@ -52,6 +54,8 @@ const useAppStore = create((set, get) => ({
     )
     set({ tree })
   },
+  selectError: n => set({typeErrorNumber: n}),
+  selectFix: n => set({typeErrorFix: n}),
   typecheck: async () => {
     let rootDir = get().rootDir
     let docPath = get().docPath
@@ -59,16 +63,38 @@ const useAppStore = create((set, get) => ({
     let result = await Neutralino.os.execCommand(command);
     if (result.stdOut.length) {
       let diagnosis = JSON.parse(result.stdOut)
+
       let { constraints, islands, mus, mcs, mss } = diagnosis
-      let highlights = [...new Set(islands[0].flatMap(n => mus[n]))].map(n => constraints.find(c => c.id === n).loc)
-      console.log(highlights)
-      set({ highlights })
+      //let highlights = [...new Set(islands[0].flatMap(n => mus[n]))].map(n => constraints.find(c => c.id === n).loc)
+      const typeErrors = islands.map(island => {
+        let allConstraintsNumbers = nub(island.flatMap(n => mus[n]))
+        let partialMcsNumbers = mcs.map(m => m.filter(n => allConstraintsNumbers.includes(n)))
+        let uniqMcsNumbers = nubArray(partialMcsNumbers)
+        return {
+          allLocs: allConstraintsNumbers.map(findLoc(constraints)),
+          fixes: uniqMcsNumbers.map(fix => fix.map(findLoc(constraints))),
+          mus: island.map(n => mus[n])
+        }
+      })
+      set({ typeErrors, igError: "" })
 
     } else {
-      set({ igError: result.stdErr })
+      set({ typeErrors: [], igError: result.stdErr })
     }
 
   }
 }))
 
+const nub = a => [...new Set(a)]
+const nubArray = a => {
+  const sorted = a.map(x => [...x].sort())
+  const encodeArray = sorted.map(x => x.join(","))
+  const nubbed = nub(encodeArray)
+  return nubbed.map(x => x.split(",").map(n => parseInt(n, 10)))
+}
+
+const findLoc = (constraints, n) => {
+  if (n) return constraints.find(c => c.id == n).loc
+  return x => constraints.find(c => c.id == x).loc
+}
 export default useAppStore

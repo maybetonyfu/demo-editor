@@ -7,9 +7,11 @@ import useAppStore from "./state"
 
 export default () => {
   let dom = useRef(null)
-  let highlights = useAppStore(state => state.highlights)
   let saveDoc = useAppStore(state => state.saveDoc)
   let document = useAppStore(state => state.docContent)
+  let typeErrors = useAppStore(state => state.typeErrors)
+  let typeErrorNumber = useAppStore(state => state.typeErrorNumber)
+  let typeErrorFix = useAppStore(state => state.typeErrorFix)
   let defaultTheme = EditorView.theme({
     "&": {
       height: "100%"
@@ -35,7 +37,12 @@ export default () => {
 
   useEffect(() => {
     const editorTheme = EditorView.baseTheme({
-      ".marker": { background: "hotpink" }
+      ".marker0": { background: "#d5f200" },
+      ".marker1": { background: "#ffdddf" },
+      ".marker2": { background: "#ffe0b2" },
+      ".marker3": { background: "#5dffa2" },
+      ".marker4": { background: "#c6e0ff" },
+      ".marker5": { background: "#00ffe4" },
     });
 
     const defaultKeymap = keymap.of([{
@@ -52,7 +59,7 @@ export default () => {
           if (e.is(hlEffectRef.current)) {
             newfield = newfield.update({
               add: [
-                Decoration.mark({ class: "marker" }).range(e.value.from, e.value.to)
+                Decoration.mark({ class: e.value.marker }).range(e.value.from, e.value.to)
               ]
             });
           }
@@ -88,16 +95,22 @@ export default () => {
   useEffect(() => {
     if (view) {
       let doc = view.state.doc;
-      let hlEffects = highlights.map(({ from, to }) => {
+      let highlights = []
+      if (typeErrorNumber !== null && typeErrorFix === null) {
+        highlights = typeErrors[typeErrorNumber].fixes.flatMap((fix, i) => fix.map(loc => ({...loc, fix: i})));
+      } else if (typeErrorNumber !== null && typeErrorFix !== null) {
+        highlights = typeErrors[typeErrorNumber].fixes[typeErrorFix].map(loc => ({...loc, fix: typeErrorFix}))
+      }
+      let hlEffects = highlights.map(({ from, to, fix }) => {
         let [fromL, fromC] = from
         let [toL, toC] = to
         const startPos = doc.line(fromL).from + fromC - 1
         const endPos = doc.line(toL).from + toC - 1
-        return hlEffectRef.current.of({ from: startPos, to: endPos, marker: "marker" })
+        return hlEffectRef.current.of({ from: startPos, to: endPos, marker: `marker${fix}` })
       })
       view.dispatch({ effects: hlEffects })
     }
-  }, [highlights])
+  }, [typeErrors, typeErrorNumber, typeErrorFix ])
   return (
     <div ref={dom} id="editor" className="h-full ">
     </div>

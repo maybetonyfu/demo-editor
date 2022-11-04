@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap');
 
+
 html {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
@@ -7,5 +8,29 @@ html {
 
 body, html {
     height: 100%;
+}
+
+.marker0 {
+    background: #d5f200;
+}
+
+.marker1 {
+    background: #ffdddf;
+}
+
+.marker2 {
+    background: #ffe0b2;
+}
+
+.marker3 {
+    background: #5dffa2;
+}
+
+.marker4 {
+   background: #c6e0ff;
+}
+
+.marker5 {
+    background: #00ffe4;
 }
 
